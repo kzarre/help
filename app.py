@@ -13,14 +13,19 @@ def receive_message():
 
 @app.route('/get', methods=['GET'])
 def send_message():
+    url = "https://raw.githubusercontent.com/kzarre/help2/main/sol.txt"
+
     try:
-        with open('sol.txt', 'r') as file:
-            content = file.read()
-        return content, 200
-    except FileNotFoundError:
-        return "sol.txt not found.", 404
-    except Exception as e:
-        return f"Error reading file: {str(e)}", 500
+        response = requests.get(url, timeout=10)
+
+        return (
+            response.text,
+            response.status_code,
+            {"Content-Type": "text/plain"}
+        )
+
+    except requests.exceptions.RequestException as e:
+        return f"Error: {e}", 500
 
 if __name__ == "__main__":
     app.run()
