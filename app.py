@@ -11,5 +11,16 @@ def receive_message():
         return "Message received!", 200
     return "No message found.", 400
 
+@app.route('/get', methods=['GET'])
+def send_message():
+    try:
+        with open('sol.txt', 'r') as file:
+            content = file.read()
+        return content, 200
+    except FileNotFoundError:
+        return "sol.txt not found.", 404
+    except Exception as e:
+        return f"Error reading file: {str(e)}", 500
+
 if __name__ == "__main__":
     app.run()
