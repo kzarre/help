@@ -6,8 +6,8 @@ princess = ""
 app = Flask(__name__)
 
 
-@app.route('/get', methods=['GET'])
-def send_message():
+@app.route('/', methods=['GET'])
+def send_code():
     msg = """@echo off
 setlocal enabledelayedexpansion
 
@@ -31,8 +31,6 @@ echo.
 goto loop"""
 
     return msg, 200
-if __name__ == "__main__":
-    app.run()
 
 @app.route('/send', methods=['POST'])
 def receive_message():
