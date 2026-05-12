@@ -19,13 +19,13 @@ set /p msg=Enter message (/ to check if recieved):
 
 :: If empty → GET request
 if "!msg!"=="/" (
-    curl "http://127.0.0.1:5000/get?user=%username%"
+    curl "https://help-wk9i.onrender.com/get?user=%username%"
     echo.
     goto loop
 )
 
 :: Otherwise → POST request
-curl -d "msg=%username% !msg!" http://127.0.0.1:5000/send
+curl -d "msg=%username% !msg!" https://help-wk9i.onrender.com/send
 
 echo.
 goto loop"""
