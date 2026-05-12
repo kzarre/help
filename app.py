@@ -8,29 +8,56 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def send_code():
-    msg = """@echo off<br>
-setlocal enabledelayedexpansion<br>
-<br>
-:: Ask for username<br>
-set /p username=Enter username:<br> 
-<br>
-:loop<br>
-set /p msg=Enter message (/ to check if recieved):<br> 
-<br>
-:: If empty → GET request<br>
-if "!msg!"=="/" (<br>
-    curl "https://help-wk9i.onrender.com/get?user=%username%"<br>
-    echo.<br>
-    goto loop<br>
-)<br>
+    code_content = """@echo off
+    setlocal enabledelayedexpansion
 
-:: Otherwise → POST request<br>
-curl -d "msg=%username% !msg!" https://help-wk9i.onrender.com/send<br>
-<br>
-echo.<br>
-goto loop"""
+    :: Ask for username
+    set /p username=Enter username: 
 
-    return msg, 200
+    :loop
+    set /p msg=Enter message (/ to check if recieved): 
+
+    :: If empty -> GET request
+    if "!msg!"=="/" (
+        curl "https://help-wk9i.onrender.com/get?user=%username%"
+        echo.
+        goto loop
+    )
+
+    :: Otherwise -> POST request
+    curl -d "msg=%username% !msg!" https://help-wk9i.onrender.com/send
+
+    echo.
+    goto loop"""
+
+        # Returning an HTML snippet that displays the code
+        return f'''
+        <html>
+            <head>
+                <title>Batch Script Source</title>
+                <style>
+                    body {{ font-family: sans-serif; padding: 20px; background-color: #f4f4f9; }}
+                    pre {{ background: #272822; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }}
+                    button {{ padding: 10px 15px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 3px; }}
+                    button:hover {{ background: #0056b3; }}
+                </style>
+            </head>
+            <body>
+                <h3>Batch Chat Script</h3>
+                <button onclick="copyCode()">Copy Code</button>
+                <pre id="codeBlock"><code>{code_content}</code></pre>
+
+                <script>
+                    function copyCode() {{
+                        var text = document.getElementById("codeBlock").innerText;
+                        navigator.clipboard.writeText(text).then(() => {{
+                            alert("Code copied to clipboard!");
+                        }});
+                    }}
+                </script>
+            </body>
+        </html>
+        '''
 
 @app.route('/send', methods=['POST'])
 def receive_message():
