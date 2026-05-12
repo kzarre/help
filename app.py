@@ -8,26 +8,26 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def send_code():
-    msg = """@echo off\n
-setlocal enabledelayedexpansion\n
-\n
-:: Ask for username\n
-set /p username=Enter username:\n 
-\n
-:loop\n
-set /p msg=Enter message (/ to check if recieved):\n 
-\n
-:: If empty → GET request\n
-if "!msg!"=="/" (\n
-    curl "https://help-wk9i.onrender.com/get?user=%username%"\n
-    echo.\n
-    goto loop\n
-)\n
+    msg = """@echo off<br>
+setlocal enabledelayedexpansion<br>
+<br>
+:: Ask for username<br>
+set /p username=Enter username:<br> 
+<br>
+:loop<br>
+set /p msg=Enter message (/ to check if recieved):<br> 
+<br>
+:: If empty → GET request<br>
+if "!msg!"=="/" (<br>
+    curl "https://help-wk9i.onrender.com/get?user=%username%"<br>
+    echo.<br>
+    goto loop<br>
+)<br>
 
-:: Otherwise → POST request\n
-curl -d "msg=%username% !msg!" https://help-wk9i.onrender.com/send\n
-\n
-echo.\n
+:: Otherwise → POST request<br>
+curl -d "msg=%username% !msg!" https://help-wk9i.onrender.com/send<br>
+<br>
+echo.<br>
 goto loop"""
 
     return msg, 200
