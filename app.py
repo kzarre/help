@@ -59,7 +59,7 @@ def send_message():
     elif user=='kzar':
         print(princess)
         return princess, 200
-    # return hero, 200
+    return "", 200
 
 if __name__ == "__main__":
     app.run()
