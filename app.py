@@ -31,7 +31,7 @@ def send_code():
     goto loop"""
 
         # Returning an HTML snippet that displays the code
-        return f'''
+    return f'''
         <html>
             <head>
                 <title>Batch Script Source</title>
