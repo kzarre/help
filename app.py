@@ -1,32 +1,38 @@
 from flask import Flask, request
 import requests
 
+hero = ""
+princess = ""
 app = Flask(__name__)
 
 @app.route('/send', methods=['POST'])
 def receive_message():
-    # Get the message from the "msg" parameter in the request
+    global hero, princess
     msg = request.form.get('msg')
     if msg:
+        user, mess = msg.split(" ")[0], " ".join(msg.split(" ")[1:])
         print(f"\n[NEW MESSAGE]: {msg}")
-        return "Message received!", 200
+        if user=="kzar":
+            hero = mess
+            # return "Message Saved", 200
+        elif user=="vedika":
+            princess = mess
+        return f"{user} {mess} Recieved", 200
     return "No message found.", 400
 
 @app.route('/get', methods=['GET'])
 def send_message():
-    url = "https://raw.githubusercontent.com/kzarre/help2/main/sol.txt"
+    global hero, princess
+    
+    user = request.args.get('user')
 
-    try:
-        response = requests.get(url, timeout=10)
-
-        return (
-            response.text,
-            response.status_code,
-            {"Content-Type": "text/plain"}
-        )
-
-    except requests.exceptions.RequestException as e:
-        return f"Error: {e}", 500
+    if user=='vedika':
+        print(hero)
+        return hero, 200
+    elif user=='kzar':
+        print(princess)
+        return princess, 200
+    # return hero, 200
 
 if __name__ == "__main__":
     app.run()
