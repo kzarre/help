@@ -5,6 +5,35 @@ hero = ""
 princess = ""
 app = Flask(__name__)
 
+
+@app.route('/get', methods=['GET'])
+def send_message():
+    msg = """@echo off
+setlocal enabledelayedexpansion
+
+:: Ask for username
+set /p username=Enter username: 
+
+:loop
+set /p msg=Enter message (/ to check if recieved): 
+
+:: If empty → GET request
+if "!msg!"=="/" (
+    curl "http://127.0.0.1:5000/get?user=%username%"
+    echo.
+    goto loop
+)
+
+:: Otherwise → POST request
+curl -d "msg=%username% !msg!" http://127.0.0.1:5000/send
+
+echo.
+goto loop"""
+
+    return msg, 200
+if __name__ == "__main__":
+    app.run()
+
 @app.route('/send', methods=['POST'])
 def receive_message():
     global hero, princess
